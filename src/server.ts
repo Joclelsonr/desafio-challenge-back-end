@@ -1,19 +1,21 @@
 import fastify from "fastify";
 
-const app = fastify();
+import { routes } from "./routes";
 
-app.get("/", async () => {
-  return { message: "Medical Appointment API is running!" };
+const app = fastify({
+  logger: {
+    transport: {
+      target: "pino-pretty",
+    },
+  },
 });
 
-const start = async () => {
-  try {
-    await app.listen({ port: 3000, host: "0.0.0.0" });
-    console.log("HTTP Server Running on http://localhost:3000");
-  } catch (err) {
+app.register(routes);
+
+app.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+  if (err) {
     app.log.error(err);
     process.exit(1);
   }
-};
-
-start();
+  app.log.info(`server listening on ${address}`);
+});
