@@ -1,21 +1,22 @@
 import fastify from "fastify";
 
-import { routes } from "./routes";
+import { patientsRoutes } from "./routes/patients.route";
 
 const app = fastify({
   logger: {
-    transport: {
-      target: "pino-pretty",
-    },
+    transport: { target: "pino-pretty" },
   },
 });
 
-app.register(routes);
+app.register(patientsRoutes);
 
-app.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+
+app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     app.log.error(err);
     process.exit(1);
   }
+  app.log.info(app.printRoutes());
   app.log.info(`server listening on ${address}`);
 });

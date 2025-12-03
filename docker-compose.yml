@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: medical-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: medical-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    
   app:
     build:
       context: .
@@ -11,3 +24,11 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/medical-db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
