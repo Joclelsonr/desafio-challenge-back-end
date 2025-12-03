@@ -9,3 +9,14 @@ Content-Type: application/json
   "email": "jhondoe@hotmail.com",
   "phone": "(11) 99999-9999"
 }
+
+
+### create doctor
+POST {{ URL }}/doctors HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Dr. Andressa",
+  "specialty": "Ginecologista",
+  "price": 120.00
+}
