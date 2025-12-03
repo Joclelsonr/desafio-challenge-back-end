@@ -1,0 +1,26 @@
+import { PrismaConnection } from "../lib/prisma";
+
+import type { Patient } from "../generated/prisma/client";
+import type { PatientCreateInput } from "../generated/prisma/models";
+
+export interface IPatientsRepository {
+  create(data: PatientCreateInput): Promise<Patient>;
+  findByEmail(email: string): Promise<Patient | null>;
+  findById(id: string): Promise<Patient | null>;
+}
+
+export class PatientsRepository implements IPatientsRepository {
+  constructor(private readonly prisma: PrismaConnection) {}
+
+  create = async (data: PatientCreateInput) => {
+    return this.prisma.patient.create({ data });
+  };
+
+  findByEmail = async (email: string) => {
+    return this.prisma.patient.findUnique({ where: { email } });
+  };
+
+  findById = async (id: string) => {
+    return this.prisma.patient.findUnique({ where: { id } });
+  };
+}
