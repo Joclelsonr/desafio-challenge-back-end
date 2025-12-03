@@ -1,5 +1,6 @@
 import fastify from "fastify";
 
+import { errorHandler } from "./error/error-handler";
 import { patientsRoutes } from "./routes/patients.route";
 
 const app = fastify({
@@ -7,6 +8,8 @@ const app = fastify({
     transport: { target: "pino-pretty" },
   },
 });
+
+app.setErrorHandler(errorHandler);
 
 app.register(patientsRoutes);
 
