@@ -1,0 +1,5 @@
+/**
+ * Aqui podemos rodar testes
+ */
+
+console.log("Rodando testes...");

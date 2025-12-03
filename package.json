@@ -8,7 +8,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "docker:dev": "nodemon --watch src --ext ts --exec tsx src/server.ts -L"
+    "docker:dev": "nodemon --watch src --ext ts --exec tsx src/server.ts -L",
+    "prepare": "husky"
   },
   "dependencies": {
     "@prisma/client": "^6.17.1",
@@ -19,10 +20,22 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "nodemon": "^3.1.11",
+    "prettier": "^3.7.4",
     "prisma": "^6.17.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.48.1"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+    "*.{json,md}": "prettier --write"
   }
 }
