@@ -22,3 +22,31 @@ model Patient {
 
   @@map("patients")
 }
+
+model Doctor {
+  id        String  @id @default(uuid())
+  name      String
+  specialty String
+  price     Decimal @db.Decimal(8, 2)
+
+  schedules DoctorSchedule[]
+
+  @@map("doctors")
+}
+
+model DoctorSchedule {
+  id String @id @default(uuid())
+
+  // Dias da semana armazenados como Inteiro (0=Domingo, 1=Segunda...)
+  availableFromWeekDay Int // Disponível a partir de
+  availableToWeekDay   Int // Disponível até
+
+  // Horários armazenados como string (Ex: "08:30")
+  availableFromTime String // Disponível a partir de
+  availableToTime   String // Disponível até
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  doctorId String
+
+  @@map("doctor_schedules")
+}
