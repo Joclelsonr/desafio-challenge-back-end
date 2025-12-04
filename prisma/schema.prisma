@@ -20,6 +20,9 @@ model Patient {
   email String @unique
   phone String
 
+  // Relacionamento: Um paciente pode ter vários agendamentos
+  appointments Appointment[]
+
   @@map("patients")
 }
 
@@ -29,7 +32,9 @@ model Doctor {
   specialty String
   price     Decimal @db.Decimal(8, 2)
 
-  schedules DoctorSchedule[]
+  // Relacionamentos
+  schedules    DoctorSchedule[]
+  appointments Appointment[]
 
   @@map("doctors")
 }
@@ -49,4 +54,29 @@ model DoctorSchedule {
   doctorId String
 
   @@map("doctor_schedules")
+}
+
+model Appointment {
+  id String @id @default(uuid())
+
+  status AppointmentStatus @default(SCHEDULED)
+
+  // Relacionamentos
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  doctorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  SCHEDULED // agendado
+  ONGOING // em consulta
+  FINISHED // finalizado
+  CANCELED // cancelado
 }
