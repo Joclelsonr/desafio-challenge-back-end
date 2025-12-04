@@ -11,6 +11,11 @@ export interface IDoctorsRepository {
     data: CreateScheduleBody,
   ): Promise<DoctorSchedule>;
   findById(id: string): Promise<Doctor | null>;
+  findAvailability(
+    doctorId: string,
+    dayOfWeek: number,
+    time: string,
+  ): Promise<DoctorSchedule | null>;
 }
 
 export class DoctorsRepository implements IDoctorsRepository {
@@ -43,4 +48,16 @@ export class DoctorsRepository implements IDoctorsRepository {
       },
     });
   };
+
+  async findAvailability(doctorId: string, dayOfWeek: number, time: string) {
+    return this.prisma.doctorSchedule.findFirst({
+      where: {
+        doctorId,
+        availableFromWeekDay: { lte: dayOfWeek },
+        availableToWeekDay: { gte: dayOfWeek },
+        availableFromTime: { lte: time },
+        availableToTime: { gt: time },
+      },
+    });
+  }
 }
