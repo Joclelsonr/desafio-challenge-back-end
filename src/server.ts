@@ -1,8 +1,10 @@
 import fastify from "fastify";
 
 import { errorHandler } from "./error/error-handler";
+
 import { patientsRoutes } from "./routes/patients.route";
 import { doctorsRoutes } from "./routes/doctors.route";
+import { appointmentsRoutes } from "./routes/appointments.route";
 
 const app = fastify({
   logger: {
@@ -16,6 +18,7 @@ app.setErrorHandler(errorHandler);
 // Rotas
 app.register(patientsRoutes);
 app.register(doctorsRoutes);
+app.register(appointmentsRoutes);
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
