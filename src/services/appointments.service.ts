@@ -2,6 +2,7 @@ import { AppError } from "../error/app.error";
 import { AppointmentsRepository } from "../repositories/appointments.repository";
 import { DoctorsRepository } from "../repositories/doctors.repository";
 import { PatientsRepository } from "../repositories/patients.repository";
+import { MailService } from "./mail.service";
 
 import type { Appointment } from "../generated/prisma/client";
 import type { CreateAppointmentBody } from "../schemas/appointments.schema";
@@ -11,6 +12,7 @@ export class AppointmentsService {
     private readonly appointmentsRepository: AppointmentsRepository,
     private readonly doctorsRepository: DoctorsRepository,
     private readonly patientsRepository: PatientsRepository,
+    private readonly mailService: MailService,
   ) {}
 
   create = async ({
@@ -31,13 +33,11 @@ export class AppointmentsService {
 
     const dayOfWeek = appointmentDate.getDay();
     const timeString = appointmentDate.toISOString().slice(11, 16);
-
     const isAvailable = await this.doctorsRepository.findAvailability(
       doctorId,
       dayOfWeek,
       timeString,
     );
-    console.log("isAvailable", isAvailable);
     if (!isAvailable) {
       throw new AppError("Doctor is not available at this time/day.", 400);
     }
@@ -72,6 +72,13 @@ export class AppointmentsService {
     });
 
     // TODO: Enviar Email
+    await this.mailService.sendEmailAppointmentsConfirmation(
+      patient.email,
+      patient.name,
+      doctor.specialty,
+      appointmentDate,
+      Number(doctor.price),
+    );
 
     return appointment;
   };

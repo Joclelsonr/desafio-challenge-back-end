@@ -16,20 +16,20 @@ POST {{ URL }}/doctors HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Dr. Andressa",
-  "specialty": "Ginecologista",
-  "price": 120.00
+  "name": "Dra. Andressa Cavalcante",
+  "specialty": "Pediatra",
+  "price": 100
 }
 
 ### create doctor's schedule
-POST {{ URL }}/doctors/553ef01c-11ef-4171-991e-2e83364ae0ea/schedule HTTP/1.1
+POST {{ URL }}/doctors/5b29f9a7-d372-41fd-9741-3fa2fb24892c/schedule HTTP/1.1
 Content-Type: application/json
 
 {
-  "availableFromWeekDay": 1,
-  "availableToWeekDay": 1,
-  "availableFromTime": "15:00",
-  "availableToTime": "18:00"
+  "availableFromWeekDay": 3,
+  "availableToWeekDay": 3,
+  "availableFromTime": "08:00",
+  "availableToTime": "12:00"
 }
 
 ### create appointments
@@ -37,7 +37,7 @@ POST {{ URL }}/appointments HTTP/1.1
 Content-Type: application/json
 
 {
-  "patientId": "dc0570ab-234f-4526-90ce-a90bbe8c2e26",
-  "doctorId": "553ef01c-11ef-4171-991e-2e83364ae0ea",
-  "createdAt": "2025-12-08T16:00:00.000Z"
+  "patientId": "a471f09f-d812-4061-a289-9b4ddfd5bc80",
+  "doctorId": "5b29f9a7-d372-41fd-9741-3fa2fb24892c",
+  "createdAt": "2025-12-09T10:00:00.000Z"
 }
