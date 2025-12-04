@@ -1,7 +1,7 @@
 import { PrismaConnection } from "../lib/prisma";
 
 import type { Patient } from "../generated/prisma/client";
-import type { PatientCreateInput } from "../generated/prisma/models";
+import type { PatientCreateInput } from "../schemas/patients.schema";
 
 export interface IPatientsRepository {
   create(data: PatientCreateInput): Promise<Patient>;

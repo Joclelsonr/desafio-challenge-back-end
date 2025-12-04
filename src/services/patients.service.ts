@@ -2,7 +2,7 @@ import { AppError } from "../error/app.error";
 import { PatientsRepository } from "../repositories/patients.repository";
 
 import type { Patient } from "../generated/prisma/client";
-import type { PatientCreateInput } from "../generated/prisma/models";
+import type { PatientCreateInput } from "../schemas/patients.schema";
 
 export class PatientsService {
   constructor(private readonly patientsRepository: PatientsRepository) {}
