@@ -5,4 +5,5 @@ const doctorsController = makeDoctorsFactory();
 
 export async function doctorsRoutes(app: FastifyInstance) {
   app.post("/doctors", doctorsController.createDoctor);
+  app.post("/doctors/:doctorId/schedule", doctorsController.createSchedule);
 }

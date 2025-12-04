@@ -1,6 +1,6 @@
 @URL = http://localhost:3000
 
-### create client
+### create patients
 POST {{ URL }}/patients HTTP/1.1
 Content-Type: application/json
 
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 
-### create doctor
+### create doctors
 POST {{ URL }}/doctors HTTP/1.1
 Content-Type: application/json
 
@@ -19,4 +19,15 @@ Content-Type: application/json
   "name": "Dr. Andressa",
   "specialty": "Ginecologista",
   "price": 120.00
+}
+
+### create doctor's schedule
+POST {{ URL }}/doctors/553ef01c-11ef-4171-991e-2e83364ae0ea/schedule HTTP/1.1
+Content-Type: application/json
+
+{
+  "availableFromWeekDay": 3,
+  "availableToWeekDay": 3,
+  "availableFromTime": "15:00",
+  "availableToTime": "18:00"
 }
