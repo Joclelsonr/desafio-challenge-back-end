@@ -1,5 +1,3 @@
-/**
- * Aqui podemos rodar testes
- */
+#!/bin/sh
 
-console.log("Rodando testes...");
+echo 'aqui podemos rodar testes...'

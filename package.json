@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "docker:dev": "nodemon --watch src --ext ts --exec tsx src/server.ts -L",
-    "prepare": "husky"
+    "prepare": "husky",
+    "seed": "prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^6.17.1",
@@ -39,5 +40,8 @@
   "lint-staged": {
     "*.{js,ts}": "eslint --fix",
     "*.{json,md}": "prettier --write"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed/index.ts"
   }
 }
