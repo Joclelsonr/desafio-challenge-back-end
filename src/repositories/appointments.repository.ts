@@ -1,41 +1,44 @@
 import { PrismaConnection } from "../lib/prisma";
+import { AppointmentStatus } from "../generated/prisma/client";
 
-import type { Appointment } from "../generated/prisma/client";
-import type { AppointmentUncheckedCreateInput } from "../generated/prisma/models";
-
-export interface IAppointmentsRepository {
-  create(data: AppointmentUncheckedCreateInput): Promise<Appointment>;
-  findDoctorConflict(doctorId: string, date: Date): Promise<Appointment | null>;
-  findPatientConflict(
-    patientId: string,
-    date: Date,
-  ): Promise<Appointment | null>;
-}
+import type { CreateAppointmentBody } from "../schemas/appointments.schema";
+import type { IAppointmentsRepository } from "../interfaces/appointments.interface";
 
 export class AppointmentsRepository implements IAppointmentsRepository {
   constructor(private prisma: PrismaConnection) {}
 
-  async create(data: AppointmentUncheckedCreateInput) {
+  create = async (data: CreateAppointmentBody) => {
     return this.prisma.appointment.create({ data });
-  }
+  };
 
-  async findDoctorConflict(doctorId: string, date: Date) {
+  findById = async (id: string) => {
+    return this.prisma.appointment.findUnique({ where: { id } });
+  };
+
+  findDoctorConflict = async (doctorId: string, date: Date) => {
     return this.prisma.appointment.findFirst({
       where: {
         doctorId,
         createdAt: date,
-        status: { not: "CANCELED" },
+        status: { not: AppointmentStatus.CANCELED },
       },
     });
-  }
+  };
 
-  async findPatientConflict(patientId: string, date: Date) {
+  findPatientConflict = async (patientId: string, date: Date) => {
     return this.prisma.appointment.findFirst({
       where: {
         patientId,
         createdAt: date,
-        status: { not: "CANCELED" },
+        status: { not: AppointmentStatus.CANCELED },
       },
     });
-  }
+  };
+
+  cancel = async (id: string) => {
+    await this.prisma.appointment.update({
+      where: { id },
+      data: { status: AppointmentStatus.CANCELED },
+    });
+  };
 }

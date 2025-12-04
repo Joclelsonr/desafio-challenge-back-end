@@ -44,3 +44,6 @@ Content-Type: application/json
   "doctorId": "5b29f9a7-d372-41fd-9741-3fa2fb24892c",
   "createdAt": "2025-12-09T10:00:00.000Z"
 }
+
+### cancel appointments
+PATCH {{ URL }}/appointments/f32e0f25-439c-40d6-b8e7-33d418992bb7/cancel HTTP/1.1

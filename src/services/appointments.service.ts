@@ -3,6 +3,7 @@ import { AppointmentsRepository } from "../repositories/appointments.repository"
 import { DoctorsRepository } from "../repositories/doctors.repository";
 import { PatientsRepository } from "../repositories/patients.repository";
 import { MailService } from "./mail.service";
+import { AppointmentStatus } from "../generated/prisma/client";
 
 import type { Appointment } from "../generated/prisma/client";
 import type { CreateAppointmentBody } from "../schemas/appointments.schema";
@@ -20,8 +21,10 @@ export class AppointmentsService {
     doctorId,
     createdAt,
   }: CreateAppointmentBody): Promise<Appointment> => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const appointmentDate = new Date(createdAt!);
-    if (isNaN(appointmentDate.getTime()) || appointmentDate < new Date()) {
+    if (isNaN(appointmentDate.getTime()) || appointmentDate < today) {
       throw new AppError("Invalid date", 400);
     }
 
@@ -71,7 +74,7 @@ export class AppointmentsService {
       createdAt: appointmentDate,
     });
 
-    // TODO: Enviar Email
+    // TODO: Send Email
     await this.mailService.sendEmailAppointmentsConfirmation(
       patient.email,
       patient.name,
@@ -81,5 +84,30 @@ export class AppointmentsService {
     );
 
     return appointment;
+  };
+
+  cancel = async (appointmentId: string): Promise<void> => {
+    const appointment =
+      await this.appointmentsRepository.findById(appointmentId);
+    if (!appointment) {
+      throw new AppError("Appointment not found", 404);
+    }
+
+    if (appointment.status === AppointmentStatus.CANCELED) {
+      throw new AppError("Appointment is already canceled", 400);
+    }
+
+    const now = new Date();
+    const appointmentDate = new Date(appointment.createdAt);
+    const differenceInMs = appointmentDate.getTime() - now.getTime();
+    const differenceInHours = differenceInMs / (1000 * 60 * 60);
+    if (differenceInHours < 2) {
+      throw new AppError(
+        "You can only cancel appointments at least 2 hours in advance.",
+        400,
+      );
+    }
+
+    await this.appointmentsRepository.cancel(appointmentId);
   };
 }

@@ -5,4 +5,8 @@ const appointmentsController = makeAppointmentsFactory();
 
 export function appointmentsRoutes(app: FastifyInstance) {
   app.post("/appointments", appointmentsController.create);
+  app.patch(
+    "/appointments/:appointmentId/cancel",
+    appointmentsController.cancel,
+  );
 }
