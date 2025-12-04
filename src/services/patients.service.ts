@@ -18,4 +18,8 @@ export class PatientsService {
 
     return patient;
   };
+
+  findOne = async (id: string): Promise<Patient | null> => {
+    return this.patientsRepository.findById(id, true);
+  };
 }

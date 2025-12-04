@@ -10,6 +10,9 @@ Content-Type: application/json
   "phone": "(11) 99999-9999"
 }
 
+### find patient with appointments
+GET {{ URL }}/patients/dc0570ab-234f-4526-90ce-a90bbe8c2e26 HTTP/1.1
+
 
 ### create doctors
 POST {{ URL }}/doctors HTTP/1.1

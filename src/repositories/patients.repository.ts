@@ -20,7 +20,17 @@ export class PatientsRepository implements IPatientsRepository {
     return this.prisma.patient.findUnique({ where: { email } });
   };
 
-  findById = async (id: string) => {
-    return this.prisma.patient.findUnique({ where: { id } });
+  findById = async (id: string, IsAppointments = false) => {
+    return this.prisma.patient.findUnique({
+      where: { id },
+      include: {
+        appointments: IsAppointments
+          ? {
+              include: { doctor: true },
+              orderBy: { createdAt: "asc" },
+            }
+          : undefined,
+      },
+    });
   };
 }

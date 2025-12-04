@@ -6,4 +6,8 @@ export const createPatientSchema = z.object({
   phone: z.string().min(14).max(15),
 });
 
+export const paramsPatientSchema = z.object({
+  patientId: z.uuid({ message: "Invalid patient ID" }),
+});
+
 export type PatientCreateInput = z.infer<typeof createPatientSchema>;
