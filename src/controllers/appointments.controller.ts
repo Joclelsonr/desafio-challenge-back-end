@@ -17,13 +17,14 @@ export class AppointmentsController {
     request: FastifyRequest<{ Body: CreateAppointmentBody }>,
     reply: FastifyReply,
   ) => {
-    const { patientId, doctorId, createdAt } =
-      createAppointmentBodySchema.parse(request.body);
+    const { patientId, doctorId, date } = createAppointmentBodySchema.parse(
+      request.body,
+    );
 
     const appointment = await this.appointmentsService.create({
       patientId,
       doctorId,
-      createdAt,
+      date,
     });
 
     return reply.status(201).send(appointment);

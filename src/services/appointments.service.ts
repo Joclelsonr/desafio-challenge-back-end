@@ -19,14 +19,9 @@ export class AppointmentsService {
   create = async ({
     patientId,
     doctorId,
-    createdAt,
+    date,
   }: CreateAppointmentBody): Promise<Appointment> => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const appointmentDate = new Date(createdAt!);
-    if (isNaN(appointmentDate.getTime()) || appointmentDate < today) {
-      throw new AppError("Invalid date", 400);
-    }
+    date.setHours(0, 0, 0, 0);
 
     const patient = await this.patientsRepository.findById(patientId);
     if (!patient) throw new AppError("Patient not found", 404);
@@ -34,8 +29,8 @@ export class AppointmentsService {
     const doctor = await this.doctorsRepository.findById(doctorId);
     if (!doctor) throw new AppError("Doctor not found", 404);
 
-    const dayOfWeek = appointmentDate.getDay();
-    const timeString = appointmentDate.toISOString().slice(11, 16);
+    const dayOfWeek = date.getDay();
+    const timeString = date.toISOString().slice(11, 16);
     const isAvailable = await this.doctorsRepository.findAvailability(
       doctorId,
       dayOfWeek,
@@ -47,7 +42,7 @@ export class AppointmentsService {
 
     const doctorConflict = await this.appointmentsRepository.findDoctorConflict(
       doctorId,
-      appointmentDate,
+      date,
     );
     if (doctorConflict) {
       throw new AppError(
@@ -57,10 +52,7 @@ export class AppointmentsService {
     }
 
     const patientConflict =
-      await this.appointmentsRepository.findPatientConflict(
-        patientId,
-        appointmentDate,
-      );
+      await this.appointmentsRepository.findPatientConflict(patientId, date);
     if (patientConflict) {
       throw new AppError(
         "Patient already has an appointment at this time.",
@@ -71,7 +63,7 @@ export class AppointmentsService {
     const appointment = await this.appointmentsRepository.create({
       patientId,
       doctorId,
-      createdAt: appointmentDate,
+      date,
     });
 
     // TODO: Send Email
@@ -79,7 +71,7 @@ export class AppointmentsService {
       patient.email,
       patient.name,
       doctor.specialty,
-      appointmentDate,
+      date,
       Number(doctor.price),
     );
 
