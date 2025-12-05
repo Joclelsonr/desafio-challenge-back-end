@@ -1,16 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { PatientsService } from "../services/patients.service";
+
 import {
-  createPatientSchema,
+  createPatientBody,
   paramsPatientSchema,
 } from "../schemas/patients.schema";
+import { PatientsService } from "../services/patients.service";
 import { PatientsPresenter } from "../presenters/patients.presenter";
 
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   create = async (request: FastifyRequest, reply: FastifyReply) => {
-    const { name, email, phone } = createPatientSchema.parse(request.body);
+    const { name, email, phone } = createPatientBody.parse(request.body);
 
     const patient = await this.patientsService.create({ name, email, phone });
 
@@ -29,6 +30,9 @@ export class PatientsController {
       return reply.status(404).send({ message: "Patient not found" });
     }
 
-    return reply.status(200).send(PatientsPresenter.toHTTP(patient));
+    const patientWithAppointments = PatientsPresenter.toHTTP(patient);
+    console.log(patientWithAppointments);
+
+    return reply.status(200).send(patientWithAppointments);
   };
 }

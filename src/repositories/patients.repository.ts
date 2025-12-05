@@ -1,10 +1,10 @@
 import { PrismaConnection } from "../lib/prisma";
 
 import type { Patient } from "../generated/prisma/client";
-import type { PatientCreateInput } from "../schemas/patients.schema";
+import type { PatientCreateBody } from "../schemas/patients.schema";
 
 export interface IPatientsRepository {
-  create(data: PatientCreateInput): Promise<Patient>;
+  create(data: PatientCreateBody): Promise<Patient>;
   findByEmail(email: string): Promise<Patient | null>;
   findById(id: string): Promise<Patient | null>;
 }
@@ -12,7 +12,7 @@ export interface IPatientsRepository {
 export class PatientsRepository implements IPatientsRepository {
   constructor(private readonly prisma: PrismaConnection) {}
 
-  create = async (data: PatientCreateInput) => {
+  create = async (data: PatientCreateBody) => {
     return this.prisma.patient.create({ data });
   };
 
