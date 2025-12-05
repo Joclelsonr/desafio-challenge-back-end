@@ -1,32 +1,14 @@
-import fastify from "fastify";
+import { app } from "./app";
+import { env } from "./config/env";
 
-import { errorHandler } from "./error/error-handler";
-
-import { patientsRoutes } from "./routes/patients.route";
-import { doctorsRoutes } from "./routes/doctors.route";
-import { appointmentsRoutes } from "./routes/appointments.route";
-
-const app = fastify({
-  logger: {
-    transport: { target: "pino-pretty" },
-  },
-});
-
-// Error handler
-app.setErrorHandler(errorHandler);
-
-// Rotas
-app.register(patientsRoutes);
-app.register(doctorsRoutes);
-app.register(appointmentsRoutes);
-
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-
-app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    app.log.error(err);
+const start = async () => {
+  try {
+    await app.listen({ port: env.PORT, host: "0.0.0.0" });
+    app.log.info(app.printRoutes());
+  } catch (error) {
+    app.log.error(error);
     process.exit(1);
   }
-  app.log.info(app.printRoutes());
-  app.log.info(`server listening on ${address}`);
-});
+};
+
+start();
