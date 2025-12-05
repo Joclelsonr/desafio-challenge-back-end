@@ -1,7 +1,8 @@
 import { ZodError } from "zod";
-import { FastifyInstance } from "fastify";
 import { AppError } from "./app.error";
 import { STATUS_CODES } from "node:http";
+import { FastifyInstance } from "fastify";
+import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
 
 type FastifyErrorHandler = FastifyInstance["errorHandler"];
 
@@ -12,6 +13,15 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
       error: STATUS_CODES[400],
       message: "Validation error",
       issues: error.flatten().fieldErrors,
+    });
+  }
+
+  if (hasZodFastifySchemaValidationErrors(error)) {
+    return reply.status(400).send({
+      statusCode: 400,
+      error: STATUS_CODES[400],
+      message: error.validation[0].message || "Validation error",
+      issues: error.validation,
     });
   }
 
@@ -28,7 +38,6 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
   if (process.env.NODE_ENV !== "production") {
     console.error(error);
   } else {
-    // Em produção, podemos exibir o erro e logue em ferramenta externa (Datadog/Sentry)
     // TODO: Enviar para Datadog/Sentry
   }
 
