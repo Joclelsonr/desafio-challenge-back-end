@@ -3,14 +3,14 @@ import { DoctorsRepository } from "../repositories/doctors.repository";
 
 import type { Doctor, DoctorSchedule } from "../generated/prisma/client";
 import type {
-  DoctorCreateInput,
+  CreateDoctorBody,
   CreateScheduleBody,
 } from "../schemas/doctors.schema";
 
 export class DoctorsService {
   constructor(private readonly doctorsRepository: DoctorsRepository) {}
 
-  createDoctor = async (data: DoctorCreateInput): Promise<Doctor> => {
+  createDoctor = async (data: CreateDoctorBody): Promise<Doctor> => {
     // Aqui poderíamos verificar se já existe um médico com mesmo CRM, etc.
 
     const doctor = await this.doctorsRepository.createDoctor({ ...data });

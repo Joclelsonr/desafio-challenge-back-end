@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { DoctorsService } from "../services/doctors.service";
 import {
-  createDoctorSchema,
+  createDoctorBodySchema,
   paramsScheduleSchema,
   createScheduleBodySchema,
 } from "../schemas/doctors.schema";
 
 import type {
-  DoctorCreateInput,
+  CreateDoctorBody,
   CreateScheduleBody,
 } from "../schemas/doctors.schema";
 
@@ -15,10 +15,12 @@ export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
   createDoctor = async (
-    request: FastifyRequest<{ Body: DoctorCreateInput }>,
+    request: FastifyRequest<{ Body: CreateDoctorBody }>,
     reply: FastifyReply,
   ) => {
-    const { name, specialty, price } = createDoctorSchema.parse(request.body);
+    const { name, specialty, price } = createDoctorBodySchema.parse(
+      request.body,
+    );
 
     const doctor = await this.doctorsService.createDoctor({
       name,
