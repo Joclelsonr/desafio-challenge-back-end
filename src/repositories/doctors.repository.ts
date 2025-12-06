@@ -1,24 +1,11 @@
 import { PrismaConnection } from "../lib/prisma";
 
-import type { Doctor, DoctorSchedule } from "../generated/prisma/client";
+import type { Doctor } from "../generated/prisma/client";
 import type {
   CreateDoctorBody,
   CreateScheduleBody,
 } from "../schemas/doctors.schema";
-
-export interface IDoctorsRepository {
-  createDoctor(data: CreateDoctorBody): Promise<Doctor>;
-  createSchedule(
-    doctorId: string,
-    data: CreateScheduleBody,
-  ): Promise<DoctorSchedule>;
-  findById(id: string): Promise<Doctor | null>;
-  findAvailability(
-    doctorId: string,
-    dayOfWeek: number,
-    time: string,
-  ): Promise<DoctorSchedule | null>;
-}
+import type { IDoctorsRepository } from "../interfaces/doctors.interface";
 
 export class DoctorsRepository implements IDoctorsRepository {
   constructor(private readonly prisma: PrismaConnection) {}
