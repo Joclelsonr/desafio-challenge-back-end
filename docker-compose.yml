@@ -26,6 +26,8 @@ services:
       - /app/node_modules
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/medical-db
+      - MAIL_HOST="smtp"
+      - MAIL_PORT=1025
     depends_on:
       - db
     restart: unless-stopped
