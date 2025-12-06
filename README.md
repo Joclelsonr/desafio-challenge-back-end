@@ -47,19 +47,19 @@ O projeto segue os princípios da **Clean Architecture** e **SOLID**, organizado
 ```text
 src/
   ├── config/ # Configurações de ambiente (Zod) e Swagger
-  |-- controllers/ # Lidam com Request/Response
-  |-- error/ # Classes de erros customizados (AppError) e Handler Global
-  |-- factories/ # Composition Root (Injeção de Dependência)
-  |-- interfaces/ # Contratos e Tipagens globais do sistema (DIP)
-  |── lib/ # Implementação concreta com Prisma
-  |-- presenters/ # Formatação de dados para o cliente
+  ├── controllers/ # Lidam com Request/Response
+  ├── error/ # Classes de erros customizados (AppError) e Handler Global
+  ├── factories/ # Composition Root (Injeção de Dependência)
+  ├── interfaces/ # Contratos e Tipagens globais do sistema (DIP)
+  ├── lib/ # Implementação concreta com Prisma
+  ├── presenters/ # Formatação de dados para o cliente
   ├── repositories/ # Camada de Acesso a Dados (Gateway)
-  |-- routes/ # Definição de endpoints
-  |-- schemas/ # Schemas Zod para validação e documentação
-  |-- services/ # Regras de Negócio puras (Use Cases)
+  ├── routes/ # Definição de endpoints
+  ├── schemas/ # Schemas Zod para validação e documentação
+  ├── services/ # Regras de Negócio puras (Use Cases)
   ├── utils/ # Formatadores e Helpers
-  └── app.ts # Configuração da instância do Fastify
-  |-- server.ts # Ponto de entrada (Entry Point)
+  ├── app.ts # Configuração da instância do Fastify
+  └── server.ts # Ponto de entrada (Entry Point)
 ```
 
 ### Decisões Técnicas
@@ -131,14 +131,14 @@ Acesse **`http://localhost:3000/docs`** para ver todos os endpoints, testar requ
 
 ### Endpoints Principais
 
-| Método  | Rota                       | Descrição                                |
-| ------- | -------------------------- | ---------------------------------------- |
-| `POST`  | `/pacients`                | Cria um paciente                         |
-| `GET`   | `/patient/:id`             | Busca perfil e consultas do paciente     |
-| `POST`  | `/doctor`                  | Cria um médico                           |
-| `POST`  | `/doctors/:id/agenda`      | Cria agenda de um médico (dias/horários) |
-| `POST`  | `/appointments`            | Realiza agendamento                      |
-| `PATCH` | `/appointments/:id/cancel` | Cancela agendamento (Regra 2h)           |
+| Método  | Rota                                  | Descrição                                |
+| ------- | ------------------------------------- | ---------------------------------------- |
+| `POST`  | `/patients`                           | Cria um paciente                         |
+| `GET`   | `/patients/:patientId`                | Busca perfil e consultas do paciente     |
+| `POST`  | `/doctors`                            | Cria um médico                           |
+| `POST`  | `/doctors/:doctorId/schedule`         | Cria agenda de um médico (dias/horários) |
+| `POST`  | `/appointments`                       | Realiza agendamento                      |
+| `PATCH` | `/appointments/:appointmentId/cancel` | Cancela agendamento (Regra 2h)           |
 
 ## 🔎 Inspecionando os Dados (Prisma Studio)
 
